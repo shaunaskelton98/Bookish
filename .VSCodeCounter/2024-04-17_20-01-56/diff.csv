@@ -1,0 +1,11 @@
+"filename", "language", "JSON", "JSON with Comments", "Python", "Markdown", "Log", "comment", "blank", "total"
+"/Users/shaunaskelton/Desktop/project/README.md", "Markdown", 0, 0, 0, -14, 0, 0, -14, -28
+"/Users/shaunaskelton/Desktop/project/angular.json", "JSON", -105, 0, 0, 0, 0, 0, 0, -105
+"/Users/shaunaskelton/Desktop/project/app.log", "Log", 0, 0, 0, 0, -5228, 0, -1, -5229
+"/Users/shaunaskelton/Desktop/project/app.py", "Python", 0, 0, -494, 0, 0, -77, -94, -665
+"/Users/shaunaskelton/Desktop/project/package-lock.json", "JSON", -31437, 0, 0, 0, 0, 0, -1, -31438
+"/Users/shaunaskelton/Desktop/project/package.json", "JSON", -47, 0, 0, 0, 0, 0, -1, -48
+"/Users/shaunaskelton/Desktop/project/tsconfig.app.json", "JSON", -13, 0, 0, 0, 0, -1, -1, -15
+"/Users/shaunaskelton/Desktop/project/tsconfig.json", "JSON with Comments", 0, -33, 0, 0, 0, -1, -1, -35
+"/Users/shaunaskelton/Desktop/project/tsconfig.spec.json", "JSON", -13, 0, 0, 0, 0, -1, -1, -15
+"Total", "-", -31615, -33, -494, -14, -5228, -80, -114, -37578

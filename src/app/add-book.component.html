@@ -1,0 +1,52 @@
+<link rel="stylesheet" href="/src/styles.css/bootstrap/dist/css/bootstrap.min.css">
+<!-- add-book.component.html -->
+<div class="container mt-4" style="margin-top: 50px !important;">
+  <h3>Add New Book Form</h3>
+  <form #addBookForm="ngForm" (ngSubmit)="onSubmit(addBookForm)">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title" [(ngModel)]="bookData.title" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="author">Author</label>
+      <input type="text" id="author" name="author" [(ngModel)]="bookData.author" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="ISBN">ISBN</label>
+      <input type="text" id="ISBN" name="ISBN" [(ngModel)]="bookData.ISBN" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="genre">Genre</label>
+      <select id="genre" name="genre" [(ngModel)]="bookData.genre" class="form-control" multiple>
+        <option *ngFor="let g of genres" [value]="g">{{ g }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="imageLink">Upload Image</label>
+      <input type="file" #fileInput id="imageLink" name="imageLink" (change)="onFileSelected($event)" class="form-control" accept="image/jpeg" required>
+      <small class="form-text text-muted">Please upload a JPG image.</small>
+    </div>
+    <span *ngIf="isIncomplete()" class="text-danger">You must complete all fields</span>
+    <button *ngIf="!isIncomplete()" type="submit" class="btn btn-primary">Submit Book</button>
+  </form>
+
+  <!-- Success Modal -->
+  <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="successModalLabel">Book Added Successfully</h5>
+          <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Your book has been added successfully!</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

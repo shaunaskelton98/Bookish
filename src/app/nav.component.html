@@ -1,0 +1,34 @@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+<nav class="navbar navbar-expand-md navbar-light bg-sage" style="padding-top: 30px; padding-bottom: 30px; padding-left: 15px; padding-right: 15px;">
+  <a class="navbar-brand" href="#">
+    <i class="fas fa-book"></i> Bookish
+  </a>
+  <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div [class.collapse]="!isNavbarOpen" class="navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/"><i class="fas fa-home"></i> Home</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/books"><i class="fas fa-book"></i> Books</a>
+      </li>
+      <li class="nav-item" *ngIf="isAdmin" routerLinkActive="active">
+        <a class="nav-link" routerLink="/add-book"><i class="fas fa-plus"></i> Add Book</a>
+      </li>
+      <li class="nav-item" *ngIf="authService.isAuthenticated$ | async">
+        <a class="nav-link" routerLink="/profile"><i class="fas fa-user"></i> Profile</a>
+      </li>
+      <li class="nav-item" *ngIf="authService.isAuthenticated$ | async; else loggedOut">
+        <a class="nav-link" (click)="authService.logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </li>
+      <ng-template #loggedOut>
+        <li class="nav-item">
+          <a class="nav-link" (click)="authService.loginWithRedirect()"><i class="fas fa-sign-in-alt"></i> Login</a>
+        </li>
+      </ng-template>
+    </ul>
+  </div>
+</nav>

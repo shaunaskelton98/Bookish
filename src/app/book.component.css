@@ -1,0 +1,51 @@
+.error {
+    background-color: #fff0f0;
+}
+
+.custom-image {
+    width: 130px; /* Set the desired width */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 5%;
+}
+
+.rating {
+    font-size: 30px;
+}
+
+.star {
+    cursor: pointer;
+}
+
+.filled {
+    color: gold;
+}
+
+.is-invalid {
+    border-color: #dc3545; 
+}
+
+.mood-icon {
+    font-size: 34px; /* Adjust size as needed */
+    margin: 5px; /* Adjust spacing as needed */
+    cursor: pointer;
+}
+
+/* Apply gold color to the filled mood icon */
+.mood-icon.filled {
+    color: gold;
+}
+
+/* Add hover effect */
+.mood-icon:hover {
+    transform: scale(1.1); /* Slightly enlarge icon on hover */
+}
+
+/* Highlight color for selected mood */
+.mood-icons i.selected {
+    color: #f0ad4e;
+}
+
+/* Color for selected mood icon */
+.selected-mood {
+    color: #ffdd00;
+}

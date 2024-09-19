@@ -1,0 +1,38 @@
+Date : 2024-04-17 20:01:56
+Directory : /Users/shaunaskelton/Desktop/project/src
+Total : 9 files,  -37384 codes, -80 comments, -114 blanks, all -37578 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| Markdown           |          1 |        -14 |          0 |        -14 |        -28 |
+| JSON with Comments |          1 |        -33 |         -1 |         -1 |        -35 |
+| Python             |          1 |       -494 |        -77 |        -94 |       -665 |
+| Log                |          1 |     -5,228 |          0 |         -1 |     -5,229 |
+| JSON               |          5 |    -31,615 |         -2 |         -4 |    -31,621 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                    | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                       |          9 |    -37,384 |        -80 |       -114 |    -37,578 |
+| ..                                                      |          9 |    -37,384 |        -80 |       -114 |    -37,578 |
++---------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                | language           | code       | comment    | blank      | total      |
++---------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| /Users/shaunaskelton/Desktop/project/README.md          | Markdown           |        -14 |          0 |        -14 |        -28 |
+| /Users/shaunaskelton/Desktop/project/angular.json       | JSON               |       -105 |          0 |          0 |       -105 |
+| /Users/shaunaskelton/Desktop/project/app.log            | Log                |     -5,228 |          0 |         -1 |     -5,229 |
+| /Users/shaunaskelton/Desktop/project/app.py             | Python             |       -494 |        -77 |        -94 |       -665 |
+| /Users/shaunaskelton/Desktop/project/package-lock.json  | JSON               |    -31,437 |          0 |         -1 |    -31,438 |
+| /Users/shaunaskelton/Desktop/project/package.json       | JSON               |        -47 |          0 |         -1 |        -48 |
+| /Users/shaunaskelton/Desktop/project/tsconfig.app.json  | JSON               |        -13 |         -1 |         -1 |        -15 |
+| /Users/shaunaskelton/Desktop/project/tsconfig.json      | JSON with Comments |        -33 |         -1 |         -1 |        -35 |
+| /Users/shaunaskelton/Desktop/project/tsconfig.spec.json | JSON               |        -13 |         -1 |         -1 |        -15 |
+| Total                                                   |                    |    -37,384 |        -80 |       -114 |    -37,578 |
++---------------------------------------------------------+--------------------+------------+------------+------------+------------+

@@ -1,0 +1,35 @@
+.book-container {
+    border: 1px solid #ddd; 
+    padding: 20px; 
+    border-radius: 10px; 
+    margin-top: 20px; 
+  }
+
+.custom-btn-color {
+    background-color: #8B8878;
+    border-color: #8B8878;
+}
+
+.comment-container {
+  margin-bottom: 10px; 
+  margin-top: 10px;
+}
+
+.comment {
+  border: 1px solid #ccc; 
+  padding: 15px; 
+  border-radius: 5px; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.delete-button {
+  margin-left: 10px; 
+}
+
+.toggle-comments-button {
+  margin: 5px; 
+  padding: 5px;
+}
+

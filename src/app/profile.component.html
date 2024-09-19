@@ -1,0 +1,71 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<div class="container mt-4" style="margin-top: 150px;">
+  <div class="row">
+    <!-- Profile Card -->
+    <div class="col-sm-4">
+      <div class="card bg-light">
+        <div class="card-header bg-custom-color">
+          <b>Profile</b>
+        </div>
+        <div class="card-body bg-light">
+          <div *ngIf="user" class="mr-3">
+            <div><b>Name:</b> {{ user.name }}</div>
+            <div><b>Email:</b> {{ user.email }}</div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-6 d-flex">
+            <button type="button" class="btn btn-danger custom-button flex-fill"
+              *ngIf="authService.isAuthenticated$ | async" (click)="confirmDeleteUser()">Delete Account</button>
+            <button type="button" class="btn btn-secondary custom-button flex-fill ms-2"
+              (click)="requestUserData(user?.sub, user.name)">Delete Data Request</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TBR Card -->
+    <div class="col-sm-8">
+      <div class="card bg-light">
+        <div class="card-header bg-custom-color">
+          <b>To Be Read List (TBR)</b>
+        </div>
+        <div class="card-body bg-custom-color">
+          <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div *ngFor="let book of tbrBooks" class="col mb-4">
+              <div class="card h-100 border border-2 rounded">
+                <!-- Make the book title clickable and link it to the book page -->
+                <img [src]="'/assets/images/' + book.imageLink" alt="{{ book.title }} Image" class="card-img-top">
+                <div class="card-body">
+                  <h5 class="card-title fw-bold">{{ book.title }}</h5>
+                  <p class="card-text text-muted">by {{ book.author }}</p>
+                  <button class="btn btn-secondary" (click)="deleteUserTBRBook(book.bookId)">
+                    <i class="fa fa-trash"></i> Remove from TBR
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <br>
+          <div *ngIf="!tbrBooks || tbrBooks.length === 0" class="text-muted">No books in To Be Read list</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation Dialog -->
+<ng-template #confirmationDialog let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Confirm Deletion</h4>
+  </div>
+  <div class="modal-body">
+    <p>{{ confirmMessage }}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="deleteUser()">Delete</button>
+  </div>
+</ng-template>

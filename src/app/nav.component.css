@@ -1,0 +1,14 @@
+.navbar-nav .nav-link:hover {
+    color: black !important; /* Change the color to your desired color */
+  }
+  .navbar {
+    font-family: Didot, serif;
+  }
+  
+  .bg-sage {
+    background-color: #8B8878; /* Replace with your desired sage green color code */
+  }
+  body {
+    background-color: #FEFFF1; /* Set background color to #FEFFF1 */
+  }
+  

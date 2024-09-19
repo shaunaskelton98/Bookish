@@ -1,0 +1,25 @@
+.custom-image {
+    width: 150px; /* Set the desired width */
+    height: 250px; /* Maintain aspect ratio */
+  }
+
+
+.card-header{
+  height :auto;
+}
+.card_footer{
+  height: auto;
+}
+
+.page-link.active {
+  color: black;
+}
+
+.button-container {
+  text-align: center;
+  margin-bottom: 1.5rem; /* Adjust as needed */
+}
+
+.button-container button {
+  margin-right: 1rem; /* Adjust as needed */
+}

@@ -1,0 +1,109 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css">
+
+<div class="container content-container" style="margin-top: 50px;">
+  <div class="row">
+
+<!-- Sidebar Filter -->
+<nav id="sidebar" class="col-md-3 sidebar">
+  <div class="sidebar-sticky">
+    <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+      Filters
+      <button class="btn btn-outline-secondary" type="button" (click)="toggleSidebar()">
+        <span *ngIf="isSidebarOpen">Collapse</span>
+        <span *ngIf="!isSidebarOpen">Expand</span>
+      </button>          
+    </h5>
+    <div *ngIf="isSidebarOpen">
+      <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mb-1 text-muted">Filter Genres</h6>
+      <ul class="nav flex-column">
+        <li class="nav-item" *ngFor="let genre of genres">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="{{ genre }}" [(ngModel)]="selectedGenres[genre]" (change)="applyFilters()">
+            <label class="form-check-label" for="{{ genre }}">
+              {{ genre }}
+            </label>
+          </div>
+        </li>
+      </ul>
+      <!-- Mood Filter -->
+      <div class="mt-4">
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mb-1 text-muted">Filter Mood</h6>
+        <div class="list-group list-group-flush">
+          <div class="form-check" *ngFor="let mood of moods">
+            <input class="form-check-input" type="checkbox" id="{{ mood }}" [(ngModel)]="selectedMoods[mood]" (change)="applyFilters()">
+            <label class="form-check-label" for="{{ mood }}">
+              {{ mood }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+    <!-- Main Content -->
+    <div class="col-md-9">
+      <!-- Search Bar -->
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search for books..." [(ngModel)]="searchQuery" (ngModelChange)="searchBooks()">
+        <div class="input-group-append">
+        </div>
+      </div>
+
+      <!-- Error message if there are no search results -->
+      <div *ngIf="book_list.length === 0 && searchQuery.trim() !== ''" class="alert alert-warning text-center" role="alert">
+        No results found for '{{ searchQuery }}'.
+      </div>
+
+      <!-- Sort books toggle -->
+      <div class="button-container">
+        <button class="btn btn-outline-secondary" (click)="sortBooks('title')">Sort by Title</button>
+        <button class="btn btn-outline-secondary" (click)="sortBooks('author')">Sort by Author</button>
+        <button class="btn btn-outline-secondary" (click)="sortBooks('averageRating')">Sort by Rating</button>
+      </div>              
+
+      <!-- Display books -->
+      <div class="row justify-content-center">
+        <div *ngFor="let book of book_list" class="col-md-4 mb-4">
+          <div class="card text-center d-flex flex-column align-items-center">
+            <img [src]="'/assets/images/' + book.imageLink" alt="{{ book.title }} Image" class="card-img-top custom-image text-center mt-3">
+            <div class="card-body">
+              <h5 class="card-title">{{ book.title }}</h5>
+              <p class="card-text">{{ book.author }}</p>
+              <!-- Display the calculated aggregated rating -->
+              <p class="card-text">Average Rating: {{ calculateAggregatedRating(book.reviews) }}</p>
+              <p class="card-text">Number of Reviews: {{ calculateReviewCount(book) }}</p>
+            </div>
+            <div class="card-footer w-100">
+              <a [routerLink]="['/books', book._id]" class="btn btn-secondary btn-block">View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <nav aria-label="Pagination">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [hidden]="page === 1">
+            <button class="page-link" (click)="previousPage()" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </button>
+          </li>
+          <li *ngFor="let pageItem of getPageArray(totalPages)">
+            <a class="page-link" (click)="setPage(pageItem)" [ngClass]="{'active': pageItem === page}">
+              {{ pageItem }}
+            </a>
+          </li>
+          <li class="page-item" [hidden]="page === totalPages">
+            <button class="page-link" (click)="nextPage()" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">Next</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

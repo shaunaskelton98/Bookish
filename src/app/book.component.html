@@ -1,0 +1,289 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  integrity="sha512-BYyoEx/3ZznpNPa9fKevrHYHxVIi4bp/PT/m+qn5ENK0KNe6xJzjZaUcfXWf42gRF5/Fyt02h/Q2F+g0y52x9w=="
+  crossorigin="anonymous" />
+
+<body>
+  <div class="container mt-4 mb-4" *ngIf="book">
+    <div class="card bg-light text-dark">
+      <div class="card-header">
+        <h3 class="card-title">{{ book.title }}</h3>
+      </div>
+  
+      <div class="card-body mt-4">
+        <div class="row">
+          <!-- Image container -->
+          <div class="col-md-3">
+            <div class="d-flex justify-content-center">
+              <img [src]="'/assets/images/' + book.imageLink" alt="{{ book.title }} Image" class="card-img-top custom-image">
+            </div>
+            <br>
+            <ng-container *ngIf="isAdmin">
+              <button class="btn btn-danger btn-block" style="padding: 10px; margin: 10px;" (click)="onDeleteBook(book._id)">
+                <i class="fas fa-trash-alt"></i> Delete Book
+              </button>
+            </ng-container>
+            
+            <button class="btn btn-secondary btn-block" *ngIf="authService.isAuthenticated$ | async" (click)="user && user.sub && addBookToTBR(user.sub, book)" style="padding: 10px;">
+              <i class="fas fa-bookmark"></i> Add to TBR
+            </button>
+            
+    
+          </div>
+          <!-- Book details container -->
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-6">
+                <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
+                <p class="card-text"><strong>Genres:</strong> {{ book.genre?.join(", ") }}</p>
+                <p class="card-text"><strong>Rating:</strong> {{ calculateAggregatedRating(book.reviews) | number:'1.2-2' }}</p>
+              </div>
+              <div class="col-md-6">
+                <p class="card-text"><strong>Number of Pages:</strong> {{ book.numberOfPages }}</p>
+                <p class="card-text"><strong>ISBN:</strong> {{ book.ISBN }}</p>
+                <p class="card-text"><strong>Reviews Available:</strong> {{ book.review_count }}</p>
+                <p class="card-text"><strong>Year Published:</strong> {{ book.yearPublished }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+   
+  
+
+      <!-- Mood Analytics -->
+      <div class="d-flex justify-content-center">
+      <ul style="list-style-type: none; margin: 10px; align-items: center;">
+        <li>
+          <h4>Mood Analytics</h4>
+          <div class="d-flex align-items-center">
+            <i class="far fa-smile display-5 text-muted" style="margin-right: 10px;"></i>
+            <div>
+              <span class="text-muted">{{ reviewSummary?.happy?.count || 0 }} Reviews</span>
+              <div class="progress" style="width: 600px;">
+                <div class="progress-bar bg-secondary" role="progressbar"
+                  [style.width.%]="reviewSummary?.happy?.percentage || 0"
+                  [attr.aria-valuenow]="reviewSummary?.happy?.percentage || 0" aria-valuemin="0" aria-valuemax="100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="mt-5">
+          <div class="d-flex align-items-center">
+            <i class="far fa-frown display-5 text-muted" style="margin-right: 10px;"></i>
+            <div>
+              <span class="text-muted">{{ reviewSummary?.sad?.count || 0 }} Reviews</span>
+              <div class="progress" style="width: 600px;">
+                <div class="progress-bar bg-secondary" role="progressbar"
+                  [style.width.%]="reviewSummary?.sad?.percentage || 0"
+                  [attr.aria-valuenow]="reviewSummary?.sad?.percentage || 0" aria-valuemin="0" aria-valuemax="100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="mt-5">
+          <div class="d-flex align-items-center">
+            <i class="far fa-meh display-5 text-muted" style="margin-right: 10px;"></i>
+            <div>
+              <span class="text-muted">{{ reviewSummary?.neutral?.count || 0 }} Reviews</span>
+              <div class="progress" style="width: 600px;">
+                <div class="progress-bar bg-secondary" role="progressbar"
+                  [style.width.%]="reviewSummary?.neutral?.percentage || 0"
+                  [attr.aria-valuenow]="reviewSummary?.neutral?.percentage || 0" aria-valuemin="0" aria-valuemax="100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="mt-5 mb-5">
+          <div class="d-flex align-items-center">
+            <i class="far fa-angry display-5 text-muted" style="margin-right: 10px;"></i>
+            <div>
+              <span class="text-muted">{{ reviewSummary?.angry?.count || 0 }} Reviews</span>
+              <div class="progress" style="width: 600px;">
+                <div class="progress-bar bg-secondary" role="progressbar"
+                  [style.width.%]="reviewSummary?.angry?.percentage || 0"
+                  [attr.aria-valuenow]="reviewSummary?.angry?.percentage || 0" aria-valuemin="0" aria-valuemax="100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+      </div>
+
+      <div class="card-footer">
+        <h4>Reviews:</h4>
+        <br>
+
+        <!-- Reviews list -->
+        <div class="reviews-section" *ngFor="let review of book.reviews; let i = index">
+          <div class="card text-dark mb-3">
+            <div class="card-body">
+              <!-- Display existing review details -->
+              <p class="card-text"><strong>{{ review.username }}</strong></p>
+              <p class="card-text review-content">{{ review.review }}</p>
+              <!-- Rating displayed in icons -->
+              <p class="card-text">
+                Rating:
+                <span *ngFor="let star of [].constructor(5); let i = index">
+                  <i class="fa" [class.fa-star]="i < review.rating" [class.fa-star-o]="i >= review.rating"></i>
+                </span>
+              </p>
+              <!-- Mood displayed in icons -->
+              <p class="card-text">
+                Mood:
+                <i *ngIf="review.mood === 'happy'" class="far fa-smile"></i>
+                <i *ngIf="review.mood === 'neutral'" class="far fa-meh"></i>
+                <i *ngIf="review.mood === 'sad'" class="far fa-frown"></i>
+                <i *ngIf="review.mood === 'angry'" class="far fa-angry"></i>
+              </p>
+              <p class="card-text">Review Date: {{ review.date | date:'d/M/yyyy HH:mm' }}</p>
+
+              <!-- Show Edit and Delete buttons only if the user is the creator of the review -->
+              <ng-container *ngIf="canEditOrDelete(review.username)">
+                <button class="btn btn-link text-dark" (click)="enableEdit(review)">
+                  <i class="far fa-pencil" aria-hidden="true"></i> Edit
+                </button>
+                <button class="btn btn-link text-dark" (click)="deleteReview(review)">
+                  <i class="far fa-trash" aria-hidden="true"></i> Delete
+                </button>
+              </ng-container>
+
+              <!-- Editing form -->
+
+              <ng-container *ngIf="review.isEditing">
+                <form [formGroup]="editReviewForm" style="padding: 30px;" (ngSubmit)="submitEditedReview()">
+
+                  <!-- Editing review form controls -->
+                  <div class="form-group">
+                    <label for="editUsername">Username</label>
+                    <input type="text" id="editUsername" name="editUsername" class="form-control"
+                      formControlName="editUsername" [ngClass]="{ 'is-invalid': isInvalid('editUsername') }" readonly />
+                  </div>
+                  <div class="form-group">
+                    <label for="editReview">Edit your review below</label>
+                    <textarea id="editReview" rows="3" name="editReview" class="form-control"
+                      formControlName="editReview" [ngClass]="{ 'is-invalid': isInvalid('editReview') }"></textarea>
+                    <br>
+                  </div>
+                  <div class="form-group">
+                    <!-- Edit review rating -->
+                    <label for="editRating">Edit your rating (5 = best)</label>
+                    <div class="rating">
+                      <span class="star" (click)="setRating(1)" [class.filled]=" editReviewRating >= 1">&#9733;</span>
+                      <span class="star" (click)="setRating(2)" [class.filled]=" editReviewRating >= 2">&#9733;</span>
+                      <span class="star" (click)="setRating(3)" [class.filled]=" editReviewRating >= 3">&#9733;</span>
+                      <span class="star" (click)="setRating(4)" [class.filled]=" editReviewRating >= 4">&#9733;</span>
+                      <span class="star" (click)="setRating(5)" [class.filled]=" editReviewRating === 5">&#9733;</span>
+                    </div>
+                    <!-- Edit review mood -->
+                      <label for="mood">How did this book make you feel?</label>
+                      <div class="mood-icons">
+                          <i class="far fa-smile mood-icon" [class.filled]="editMoodRating === 'happy'" (click)="setMood('happy')"></i>
+                          <i class="far fa-meh mood-icon" [class.filled]="editMoodRating === 'neutral'" (click)="setMood('neutral')"></i>
+                          <i class="far fa-frown mood-icon" [class.filled]="editMoodRating === 'sad'" (click)="setMood('sad')"></i>
+                          <i class="far fa-angry mood-icon" [class.filled]="editMoodRating === 'angry'" (click)="setMood('angry')"></i>
+                      </div>
+                      <input type="hidden" name="editMood" [value]="editMoodRating" formControlName="editMood" required>
+                      <span *ngIf="isInvalid('mood')" class="text-danger">Mood is required</span>
+                  </div>
+                  <!-- Edit review date -->
+                  <div class="form-group">
+                    <label for="editReviewDate">Review Date</label>
+                    <input type="text" id="editReviewDate" name="editReviewDate" class="form-control"
+                      formControlName="editReviewDate"
+                      [value]="editReviewForm.get('editReviewDate')?.value | date:'shortDate'" readonly />
+                  </div>
+                  <br>
+                  <!-- validation -->
+                  <span *ngIf="isInvalid('editUsername') || isInvalid('editReview') || isInvalid('editRating')">
+                    You must complete all fields
+                  </span>
+                  <button type="submit" class="btn btn-primary">Submit Edited Review</button>
+                </form>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <ng-container *ngIf="authService.isAuthenticated$ | async; else loggedOut">
+
+          <!-- Add new review form -->
+          <form [formGroup]="reviewForm" style="padding: 30px;" (ngSubmit)="onSubmit()">
+            <h4>Post your thoughts...</h4>
+            <!-- New review username -->
+            <div class="form-group">
+              <label for="username"></label>
+              <input type="text" id="username" name="username" class="form-control" formControlName="username"
+                  [ngClass]="{ 'error': isInvalid('username') }" [attr.readonly]="isEditing ? null : true"
+                  [value]="user?.name || ''" [style.width.px]="calculateUsernameWidth()" />
+          </div>          
+            <!-- New review review -->
+            <div class="form-group">
+              <label for="review"></label>
+              <textarea id="review" rows="3" name="review" class="form-control" formControlName="review"
+                  [ngClass]="{ 'error' : isInvalid('review') }" placeholder="What did you think of the book?"></textarea>
+              <br/>
+          </div>
+          
+
+            <!-- New review rating -->
+            <div class="form-group">
+              <label for="rating">Provide a star rating</label>
+              <div class="rating">
+                <span class="star" (click)="setRating(1)" [class.filled]="reviewRating >= 1">&#9733;</span>
+                <span class="star" (click)="setRating(2)" [class.filled]="reviewRating >= 2">&#9733;</span>
+                <span class="star" (click)="setRating(3)" [class.filled]="reviewRating >= 3">&#9733;</span>
+                <span class="star" (click)="setRating(4)" [class.filled]="reviewRating >= 4">&#9733;</span>
+                <span class="star" (click)="setRating(5)" [class.filled]="reviewRating === 5">&#9733;</span>
+              </div>
+              <!-- Add the required attribute to make the rating field mandatory -->
+              <input type="hidden" name="rating" [value]="reviewRating" formControlName="rating" required>
+              <!-- Add error message for the required validation -->
+              <span *ngIf="isInvalid('rating')" class="text-danger">Rating is required</span>
+            </div>
+
+            <!-- New review mood -->
+            <div class="form-group">
+              <label for="mood">How did this book make you feel?</label>
+              <div class="mood-icons">
+                <i class="far fa-smile mood-icon" [class.filled]="moodRating === 'happy'" (click)="setMood('happy')"></i>
+                <i class="far fa-meh mood-icon" [class.filled]="moodRating === 'neutral'" (click)="setMood('neutral')"></i>
+                <i class="far fa-frown mood-icon" [class.filled]="moodRating === 'sad'" (click)="setMood('sad')"></i>
+                <i class="far fa-angry mood-icon" [class.filled]="moodRating === 'angry'" (click)="setMood('angry')"></i>
+              </div>
+              <input type="hidden" name="mood" [value]="reviewForm.get('mood')?.value" formControlName="mood" required>
+              <span *ngIf="isInvalid('mood')" class="text-danger">Mood is required</span>
+            </div>
+
+            <!-- New review date -->
+            <div class="form-group">
+              <label for="reviewDate">Review Date</label>
+              <input type="text" id="reviewDate" name="reviewDate" class="form-control" formControlName="reviewDate"
+                [value]="reviewForm.get('reviewDate')?.value | date:'d/M/yyyy HH:mm'" readonly />
+            </div>
+
+            <br>
+
+            <span *ngIf="isIncomplete()"> Please complete all fields</span>
+            <button *ngIf="!isIncomplete()" type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </ng-container>
+
+        <ng-template #loggedOut>
+          <div class="alert alert-secondary text-center" role="alert">
+            <p>Please log in to review the book.</p>
+          </div>
+        </ng-template>
+        
+      </div>
+    </div>
+  </div>
+</body>
